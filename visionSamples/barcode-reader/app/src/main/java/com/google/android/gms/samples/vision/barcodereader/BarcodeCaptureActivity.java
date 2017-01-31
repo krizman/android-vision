@@ -34,6 +34,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -72,6 +73,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    private ImageView flashToggleImage;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -83,6 +85,29 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        flashToggleImage = (ImageView) findViewById(R.id.flashToggleImage);
+        flashToggleImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCameraSource == null) {
+                    return;
+                }
+
+                boolean flashOn = mCameraSource.getFlashMode() != null
+                        && mCameraSource.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH);
+                boolean success = mCameraSource.setFlashMode(
+                        flashOn
+                                ? Camera.Parameters.FLASH_MODE_OFF
+                                : Camera.Parameters.FLASH_MODE_TORCH);
+                if (!success) {
+                    return;
+                }
+                flashToggleImage.setImageResource(
+                        flashOn
+                                ? R.drawable.ic_flash_off_white_24dp
+                                : R.drawable.ic_flash_on_white_24dp);
+            }
+        });
 
         // read parameters from the intent used to launch the activity.
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
