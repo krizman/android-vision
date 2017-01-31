@@ -25,4 +25,6 @@ dependencies {
     // Important - the CameraSource implementation in this project requires version 8.1 or higher.
     compile 'com.google.android.gms:play-services-vision:10.0.1'
     compile 'com.android.support:design:25.1.1'
+    // eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

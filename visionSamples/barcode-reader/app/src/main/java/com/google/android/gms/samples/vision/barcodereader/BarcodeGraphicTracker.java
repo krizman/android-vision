@@ -20,6 +20,8 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Generic tracker which is used for tracking or reading a barcode (and can really be used for
  * any type of item).  This is used to receive newly detected items, add a graphical representation
@@ -41,6 +43,8 @@ class BarcodeGraphicTracker extends Tracker<Barcode> {
     @Override
     public void onNewItem(int id, Barcode item) {
         mGraphic.setId(id);
+        // broadcast barcode detected event
+        EventBus.getDefault().post(new BarcodeDetectedEvent(item));
     }
 
     /**
